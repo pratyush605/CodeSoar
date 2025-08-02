@@ -5,11 +5,9 @@ const router = express.Router();
 
 router.post('/signup', authController.createUser);
 
-router.post('/verify', authController.verifyUser);
+router.get('/delete', authController.deleteUser);
 
-router.get('/resend', authController.resendVerification);
-
-router.post('/login',authController.login);
+router.post('/login', authController.login);
 
 router.get('/logout', authController.logout);
 

@@ -1,8 +1,9 @@
 const jwt = require('jsonwebtoken');
+const redisClient = require('../Utils/redisClient.js');
 require('dotenv').config();
 
 const jwtMethods = {
-    jwtAuth: (req, res, next) => {
+    jwtAuth: async (req, res, next) => {
         const token = req.header('Authorization')?.replace('Bearer ', '');
     
         if (!token) {
@@ -10,6 +11,13 @@ const jwtMethods = {
         }
         try {
             const user = jwt.verify(token, process.env.JWT_SECRET);
+            const storedToken = await redisClient.get(user.userId);
+            if (!storedToken) {
+                return res.status(401).json({ message: 'Token expired or logged out. Please login again.' });
+            }
+            if (storedToken !== token) {
+                return res.status(401).json({ message: 'Invalid Jwt token. Please re-authenticate.' });
+            }
             req.user = user;
             next();
         } catch (err) {

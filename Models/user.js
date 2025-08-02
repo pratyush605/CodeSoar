@@ -26,13 +26,10 @@ const User = db.define('User', {
         type: Sequelize.STRING,
         allowNull: false
     },
-    isActive: {
-        type: Sequelize.BOOLEAN,
-        allowNull: false,
-        defaultValue: false
-    },
-    verificationCode: Sequelize.STRING,
-    verificationExpiresAt: Sequelize.DATE
+    spam: {
+        type: Sequelize.INTEGER,
+        defaultValue: 0
+    }
 }, {
     tableName: 'users',
     timestamps: true,

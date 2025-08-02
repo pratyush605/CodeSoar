@@ -1,10 +1,7 @@
 const express = require('express');
 const db = require('./Utils/database.js');
-const homeRoutes = require('./routes/homeRoutes.js');
+const userRoutes = require('./Routes/userRoute.js');
 const authRoutes = require('./Routes/authRoute.js');
-const taskRoutes = require('./routes/taskRoutes.js');
-const roleRoutes = require('./routes/roleRoutes.js');
-const userRoutes = require('./routes/userRouters.js');
 
 require('dotenv').config();
 
@@ -13,11 +10,8 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use('/', homeRoutes);
-app.use('/role', roleRoutes);
-app.use('/user', userRoutes);
+app.use('/', userRoutes);
 app.use('/auth', authRoutes);
-app.use('/task', taskRoutes);
 
 const startServer = async () => {
   try {
