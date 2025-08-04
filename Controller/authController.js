@@ -117,7 +117,7 @@ const authController = {
                 phoneNumber: phoneNumber
             }
             const token = jwtMethods.generateJwt(payload);
-            await redisClient.set(payload.userId, token, { EX: 7 * 24 * 60 * 60 });
+            redisClient.set(payload.userId, token, { EX: 7 * 24 * 60 * 60 });
             return res.status(200).json({token});
         }
         catch (err) {
@@ -126,10 +126,10 @@ const authController = {
         }
     },
 
-    logout: async (req, res) => {
+    logout: (req, res) => {
         try{
             const userId = req.user.userId;
-            await redisClient.del(userId);
+            redisClient.del(userId);
             res.status(200).json({message: 'Logout successfull!!!'});
         } catch(err) {
             res.status(500).json({message: 'error while logout!!! try again.'});

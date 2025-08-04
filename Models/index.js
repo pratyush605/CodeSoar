@@ -21,15 +21,15 @@ ContactName.belongsToMany(ContactNumber, {
 
 User.belongsToMany(ContactNumber, {
     through: ContactUserMapping,
-    foreignKey: 'ContactNumberId',
-    otherKey: 'ContactNameId',
+    foreignKey: 'UserId',
+    otherKey: 'ContactNumberId',
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE'
 });
 ContactNumber.belongsToMany(User, {
     through: ContactUserMapping,
-    foreignKey: 'ContactNameId',
-    otherKey: 'ContactNumberId',
+    foreignKey: 'ContactNumberId',
+    otherKey: 'UserId',
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE'
 });
