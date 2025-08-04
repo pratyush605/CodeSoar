@@ -8,6 +8,8 @@ router.use(applyAuthMiddleware);
 
 router.post('/spam', userController.markSpam);
 
-router.get('/search', userController.search);
+router.post('/search', userController.search);
+
+router.post('/show-details', userController.showDetails);
 
 module.exports = router;

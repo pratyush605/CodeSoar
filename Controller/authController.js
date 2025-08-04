@@ -6,7 +6,7 @@ const redisClient = require('../Utils/redisClient.js');
 
 const userSchema = Joi.object({
     name: Joi.string().min(3).max(30).required(),
-    phoneNumber: Joi.number().min(10).required,
+    phoneNumber: Joi.string().length(10).pattern(/^[6-9]\d{9}$/).required(),
     email: Joi.string().email(),
     password: Joi.string().min(3).required(),
 });
@@ -69,6 +69,8 @@ const authController = {
                         email: email,
                         password: password
                     });
+                } else {
+                    res.status(404).json({message: 'user does not exist'});
                 }
             } catch(err) {
                 console.log(err);
@@ -83,12 +85,11 @@ const authController = {
     
     deleteUser: async (req, res, next) => {
         try{
-            const phoneNumber = req.body.phoneNumber;
-            const user = await User.findOne({ where: { phoneNumber: phoneNumber } })
+            const user = await User.findOne({ where: { id: req.user.userId } });
             if (!user) {
                 return res.status(404).json({ message: 'User not found! ' });
             }
-            await User.destroy({ where: { phoneNumber: phoneNumber } });
+            await User.destroy({ where: { id: user.id } });
             res.status(200).json({ message: 'User deleted! ' });
         } catch(err) {
             res.status(500).json({ message: `Error while deleting user` });

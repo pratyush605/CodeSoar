@@ -7,29 +7,23 @@ const userController = {
             const number = req.body.number;
             const user = await User.findOne({ where: { phoneNumber: number } });
             if(user){
-                const spamCount = user.spam;
-                await user.update({
-                    spam: spamCount + 1
-                });
+                await user.increment('spam', { by: 1 });
             } else {
                 const contact = ContactNumber.findOne({where: {phoneNumber: number}});
                 if(contact){
-                    const spamCount = contact.spam;
-                    await contact.update({
-                        spam: spamCount + 1
-                    });
+                    await contact.increment('spam', { by: 1 });
                 } else {
                     const newNumber = await ContactNumber.create({
                         phoneNumber: number,
                         spam: 1
                     });
                     const newName = await ContactName.create({
-                        name: 'spam',
+                        name: `spam_${number}`
+                    });
+                    await ContactNameMapping.create({
+                        ContactNameId: newName.id,
                         ContactNumberId: newNumber.id
                     });
-                    await newNumber.update({
-                        ContactNameId: newName.id
-                    })
                 }
             }
             res.status(200).json({message: 'Marked spam successfully!!!'});
@@ -94,14 +88,11 @@ const userController = {
 
     showDetails: async (req, res, next) => {
         try{
-            const {phoneNumber, personNumber, nameId} = req.body;
+            const {phoneNumber, nameId} = req.body;
             if(phoneNumber){
                 const user = await User.findOne({where: {phoneNumber: phoneNumber}});
                 if(user){
-                    const searcher = await User.findOne({where: {phoneNumber: personNumber}});
-                    if(!searcher){
-                        searcher = await ContactNumber.findOne({where: {phoneNumber: personNumber}});
-                    }
+                    const searcher = await ContactNumber.findOne({where: {phoneNumber: req.user.phoneNumber}});
                     if(searcher) {
                         const showUserEmail = await ContactUserMapping.findOne({
                             where: {
