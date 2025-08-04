@@ -130,7 +130,7 @@ const authController = {
     logout: (req, res) => {
         try{
             const userId = req.user.userId;
-            redisClient.del(userId);
+            redisClient.del(userId.toString());
             res.status(200).json({message: 'Logout successfull!!!'});
         } catch(err) {
             res.status(500).json({message: 'error while logout!!! try again.'});
