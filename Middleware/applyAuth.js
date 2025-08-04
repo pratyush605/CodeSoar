@@ -1,11 +1,8 @@
 const jwtMethods = require('./jwtAuth.js');
 
 const excludedRoutes = [
-    '/signup',
-    '/verify',
-    '/resend',
-    '/login',
-    '/home'
+    '/auth/signup',
+    '/auth/login',
 ];
 
 const applyAuthMiddleware = (req, res, next) => {

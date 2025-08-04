@@ -15,7 +15,8 @@ const ContactNumber = db.define('ContactNumber', {
     },
     spam: {
         type: Sequelize.INTEGER,
-        defaultValue: 0
+        defaultValue: 0,
+        allowNull: false
     }
 }, {
     tableName: 'contact_numbers',

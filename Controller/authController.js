@@ -118,7 +118,7 @@ const authController = {
                 phoneNumber: phoneNumber
             }
             const token = jwtMethods.generateJwt(payload);
-            redisClient.set(payload.userId, token, { EX: 7 * 24 * 60 * 60 });
+            await redisClient.set(payload.userId.toString(), token, { EX: 7 * 24 * 60 * 60 });
             return res.status(200).json({token});
         }
         catch (err) {

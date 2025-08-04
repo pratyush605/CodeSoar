@@ -28,7 +28,8 @@ const User = db.define('User', {
     },
     spam: {
         type: Sequelize.INTEGER,
-        defaultValue: 0
+        defaultValue: 0,
+        allowNull: false
     }
 }, {
     tableName: 'users',
